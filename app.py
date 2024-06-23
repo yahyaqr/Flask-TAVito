@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import numpy as np
 import pickle
 
@@ -8,8 +8,6 @@ app = Flask(__name__)
 model_filename = 'adb_model.pkl'
 with open(model_filename, 'rb') as file:
     loaded_adb = pickle.load(file)
-
-
 
 # Function to preprocess user input
 def preprocess_input(json_data):
@@ -34,16 +32,27 @@ def preprocess_input(json_data):
 
     return np.array([list(json_data.values())]).astype(np.float64)
 
+# Endpoint to render index.html
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 # Endpoint to handle predictions
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
         json_data = request.get_json()
+        print("User Input:", json_data)  # Print user input
+
         user_data = preprocess_input(json_data)
         prediction = loaded_adb.predict(user_data)
         prediction_label = 'success' if prediction[0] == 1 else 'fail'
+
+        print("Prediction Result:", prediction_label)  # Print prediction result
+
         return jsonify({'prediction': prediction_label}), 200
     except Exception as e:
+        print("Error:", e)  # Print error message
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':

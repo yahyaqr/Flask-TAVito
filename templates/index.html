@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startup Success Prediction</title>
+    <script>
+        function submitForm(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('predictionResult').innerText = `Prediction: ${data.prediction}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Startup Success Prediction</h1>
+    <form onsubmit="submitForm(event)">
+        <label>Age First Funding Year: <input type="number" step="any" name="age_first_funding_year" required></label><br>
+        <label>Age Last Funding Year: <input type="number" step="any" name="age_last_funding_year" required></label><br>
+        <label>Age First Milestone Year: <input type="number" step="any" name="age_first_milestone_year" required></label><br>
+        <label>Age Last Milestone Year: <input type="number" step="any" name="age_last_milestone_year" required></label><br>
+        <label>Relationships: <input type="number" name="relationships" required></label><br>
+        <label>Funding Rounds: <input type="number" name="funding_rounds" required></label><br>
+        <label>Funding Total USD: <input type="number" step="any" name="funding_total_usd" required></label><br>
+        <label>Milestones: <input type="number" name="milestones" required></label><br>
+        <label>Is it Software? <input type="text" name="is_software" required></label><br>
+        <label>Is it Web? <input type="text" name="is_web" required></label><br>
+        <label>Is it Mobile? <input type="text" name="is_mobile" required></label><br>
+        <label>Is it Enterprise? <input type="text" name="is_enterprise" required></label><br>
+        <label>Is it Advertising? <input type="text" name="is_advertising" required></label><br>
+        <label>Is it Games/Video? <input type="text" name="is_games_video" required></label><br>
+        <label>Is it Ecommerce? <input type="text" name="is_ecommerce" required></label><br>
+        <label>Is it Biotech? <input type="text" name="is_biotech" required></label><br>
+        <label>Is it Consulting? <input type="text" name="is_consulting" required></label><br>
+        <label>Is it Other Category? <input type="text" name="is_other_category" required></label><br>
+        <label>Has VC? <input type="text" name="has_VC" required></label><br>
+        <label>Has Angel? <input type="text" name="has_angel" required></label><br>
+        <label>Has Round A? <input type="text" name="has_round_A" required></label><br>
+        <label>Has Round B? <input type="text" name="has_round_B" required></label><br>
+        <label>Has Round C? <input type="text" name="has_round_C" required></label><br>
+        <label>Has Round D? <input type="text" name="has_round_D" required></label><br>
+        <label>Avg Participants: <input type="number" step="any" name="avg_participants" required></label><br>
+        <label>Is Top 500? <input type="text" name="is_top_500" required></label><br>
+        <label>Age: <input type="number" name="age" required></label><br>
+        <label>Is in Big City? <input type="text" name="is_in_big_city" required></label><br>
+        <label>Has Seed? <input type="text" name="has_seed" required></label><br>
+        <label>Is Trend Industry? <input type="text" name="is_trend_industry" required></label><br>
+        <button type="submit">Predict</button>
+    </form>
+    <p id="predictionResult"></p>
+</body>
+</html>
